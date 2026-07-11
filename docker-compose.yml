@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Database Service (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: insightiq-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: insightiq
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d insightiq"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Backend Service (FastAPI)
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: insightiq-backend
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/insightiq
+      - JWT_SECRET=8f95c4a4dae6a9829bdf533b66d4000305886d9a930bb397223b2024db57e2bb
+      - SECRET_KEY=94d7bfa5db2f4a43b2f56f4e69b0fa8ad7743d7890b0ee5744a7bb2e66487e91
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .env:/app/.env
+
+  # Frontend Service (React served via Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: insightiq-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
