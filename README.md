@@ -71,24 +71,6 @@ c:\Users\HP\Desktop\Analytics Project/
 
 ---
 
-## Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-# Database URL
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/insightiq
-
-# Authentication Secrets
-JWT_SECRET=8f95c4a4dae6a9829bdf533b66d4000305886d9a930bb397223b2024db57e2bb
-SECRET_KEY=94d7bfa5db2f4a43b2f56f4e69b0fa8ad7743d7890b0ee5744a7bb2e66487e91
-
-# AI Configuration (Gemini API Key)
-GEMINI_API_KEY=your-gemini-api-key
-```
-
----
-
 ## Installation & Startup
 
 ### Option 1: Docker Compose (Recommended)
@@ -165,8 +147,4 @@ Key Endpoint Categories:
 - **Enhanced ML Architectures**: Introduce XGBoost or LSTM networks to compare against Prophet forecasting.
 - **Role-Based Access Control (RBAC)**: Fine-tune dashboard permissions for Managers vs Viewers.
 
----
 
-## License
-
-MIT License. Copyright (c) 2026 InsightIQ Team.
